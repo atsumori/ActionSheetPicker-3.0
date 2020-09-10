@@ -334,6 +334,25 @@ CG_INLINE BOOL isIPhone4() {
     [self dismissPicker];
 }
 
+- (IBAction)detectPickerOrCancel:(UITapGestureRecognizer *)tapRecognizer {
+    CGRect pickerViewBounds = self.pickerView.bounds;
+    CGPoint pointInPickerView = [tapRecognizer locationInView:self.pickerView];
+    if (CGRectContainsPoint(pickerViewBounds, pointInPickerView)) {
+        if ([self isInSelectedPickerItem:pointInPickerView]) {
+            [self notifyTarget:self.target didSucceedWithAction:self.successAction origin:[self storedOrigin]];
+            [self dismissPicker];
+        }
+        return;
+    }
+    [self notifyTarget:self.target didCancelWithAction:self.cancelAction origin:[self storedOrigin]];
+    [self dismissPicker];
+}
+
+- (BOOL)isInSelectedPickerItem:(CGPoint)point
+{
+    return NO;
+}
+
 - (void)dismissPicker {
 #if __IPHONE_4_1 <= __IPHONE_OS_VERSION_MAX_ALLOWED
     if (self.actionSheet)
