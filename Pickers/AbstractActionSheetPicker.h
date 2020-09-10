@@ -47,7 +47,8 @@ typedef NS_ENUM(NSInteger, ActionType) {
 typedef NS_ENUM(NSInteger, TapAction) {
     TapActionNone,
     TapActionSuccess,
-    TapActionCancel
+    TapActionCancel,
+    TapActionSuccessOrCancel
 };
 
 typedef void (^ActionBlock)(void);

@@ -304,6 +304,20 @@ CG_INLINE BOOL isIPhone4() {
                 [self.actionSheet.window addGestureRecognizer:tapAction];
                 break;
             }
+            case TapActionSuccessOrCancel: {
+                // add tap dismiss action
+                self.actionSheet.window.userInteractionEnabled = YES;
+                UITapGestureRecognizer *tapAction = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(detectPickerOrCancel:)];
+                tapAction.delegate = self;
+                [self.actionSheet.window addGestureRecognizer:tapAction];
+                
+                UITapGestureRecognizer *pickerTapAction = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(detectPickerOrCancel:)];
+                if (IS_IPAD) {
+                    pickerTapAction.delegate = self;
+                }
+                [self.pickerView addGestureRecognizer:pickerTapAction];
+                break;
+            }
         };
     }
 #pragma clang diagnostic pop
@@ -823,6 +837,7 @@ CG_INLINE BOOL isIPhone4() {
             break;
         }
         case TapActionNone:
+        case TapActionSuccessOrCancel:
         case TapActionCancel: {
             [self notifyTarget:self.target didCancelWithAction:self.cancelAction origin:self.storedOrigin];
             if (!self.popoverDisabled && [MyPopoverController canShowPopover]) {
